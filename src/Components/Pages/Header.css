@@ -1,0 +1,27 @@
+/* Header.css */
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgb(95, 95, 221);
+    color: #fff;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .cart-button {
+    background: #fff;
+    margin-right: 10%;
+    color: rgb(95, 95, 221);
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  
