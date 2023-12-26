@@ -1,12 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
 import productReducer from './ProductSlice'
 import cartReducer from './CartSlice'
-import  cartModalActions  from './CartModalSlice';
+import  cartModalReducer from './CartModalSlice';
+import notificationReducer from './NotificationSlice'
 const store = configureStore({
         reducer : {
             products : productReducer,
             cart : cartReducer,
-            modal : cartModalActions,
+            modal : cartModalReducer,
+            notification : notificationReducer,
         }
     })
 export default store;

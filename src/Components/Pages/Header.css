@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 0;
     padding: 1rem;
     background: rgb(95, 95, 221);
     color: #fff;

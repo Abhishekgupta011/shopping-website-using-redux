@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { notificationActions } from "./NotificationSlice";
 
 const calculateTotalAmount = (items) => {
     return items.reduce((total, item) => {
@@ -13,6 +14,10 @@ const cartSlice = createSlice({
     totalAmount : 0,
   },
   reducers: {
+    setCart(state, action) {
+        state.items = action.payload.items;
+        state.totalAmount = action.payload.totalAmount;
+      },
     addToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
@@ -48,6 +53,39 @@ const cartSlice = createSlice({
 
 },
 });
-
+export const sentCartData = (cart)=>{
+  return async (dispatch)=>{
+    dispatch(notificationActions.showNotification({
+      status : 'Pending',
+      title : 'Sending...',
+      message : 'Sending cart data request',
+    }))
+    const sendRequest = async()=>{
+      const response = await fetch('https://shopping-cart-19d62-default-rtdb.firebaseio.com/cart.json',{
+      method : 'PUT',
+      body : JSON.stringify(cart)
+    })
+    if(!response.ok){
+      throw new Error("sending request data failed")
+    } 
+    }
+    try{
+      await sendRequest();
+      dispatch(notificationActions.showNotification({
+        status : 'Success',
+        title : 'Success!',
+        message : 'Sent cart data successful',
+      }))
+    } catch (error){
+      dispatch(notificationActions.showNotification({
+        status : 'Error',
+        title : 'Error!',
+        message : 'Sending cart data failed',
+    }))
+    console.error('Something went wrong' , error)
+    }
+    
+  }
+}
 export const cartActions = cartSlice.actions;
 export default cartSlice.reducer;
