@@ -7,7 +7,7 @@ import './ProductList.css';
 const ProductList = (props) =>{
     const product  = useSelector((state)=>state.products.ProductArray)
     const dispatch = useDispatch();
-    console.log(product);
+    
 
   useEffect(() => {
     // Dispatch the initialProduct action when the component mounts

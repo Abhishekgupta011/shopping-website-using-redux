@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { notificationActions } from "./NotificationSlice";
+
 
 const calculateTotalAmount = (items) => {
     return items.reduce((total, item) => {
@@ -12,16 +12,17 @@ const cartSlice = createSlice({
   initialState: {
     items: [],
     totalAmount : 0,
+    changed : false,
   },
   reducers: {
     setCart(state, action) {
-        state.items = action.payload.items;
+        console.log('11111',state.items = action.payload.items)
         state.totalAmount = action.payload.totalAmount;
       },
     addToCart(state, action) {
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
-
+      state.changed = true;
       if (existingItem) {
         // If item already exists, increase the quantity
         existingItem.quantity++;
@@ -34,6 +35,7 @@ const cartSlice = createSlice({
     increaseQuantity(state, action) {
         const itemId = action.payload;
         const itemToIncrease = state.items.find((item) => item.id === itemId);
+        state.changed = true;
         if (itemToIncrease) {
           itemToIncrease.quantity++;
         }
@@ -42,6 +44,7 @@ const cartSlice = createSlice({
       decreaseQuantity(state, action) {
         const itemId = action.payload;
         const itemToDecrease = state.items.find((item) => item.id === itemId);
+        state.changed = true;
         if (itemToDecrease) {
           itemToDecrease.quantity--;
           if (itemToDecrease.quantity === 0) {
@@ -53,39 +56,6 @@ const cartSlice = createSlice({
 
 },
 });
-export const sentCartData = (cart)=>{
-  return async (dispatch)=>{
-    dispatch(notificationActions.showNotification({
-      status : 'Pending',
-      title : 'Sending...',
-      message : 'Sending cart data request',
-    }))
-    const sendRequest = async()=>{
-      const response = await fetch('https://shopping-cart-19d62-default-rtdb.firebaseio.com/cart.json',{
-      method : 'PUT',
-      body : JSON.stringify(cart)
-    })
-    if(!response.ok){
-      throw new Error("sending request data failed")
-    } 
-    }
-    try{
-      await sendRequest();
-      dispatch(notificationActions.showNotification({
-        status : 'Success',
-        title : 'Success!',
-        message : 'Sent cart data successful',
-      }))
-    } catch (error){
-      dispatch(notificationActions.showNotification({
-        status : 'Error',
-        title : 'Error!',
-        message : 'Sending cart data failed',
-    }))
-    console.error('Something went wrong' , error)
-    }
-    
-  }
-}
+
 export const cartActions = cartSlice.actions;
 export default cartSlice.reducer;
